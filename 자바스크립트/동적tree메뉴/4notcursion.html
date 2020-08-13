@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div>div {padding-left: 20px;}
+        div>div>div {padding-left: 25px;}
+        button{
+            width: 1.1rem;
+            height: 1.1rem;
+            padding: 0 0 0 0;
+            margin: 0 0 0 0;
+        }
+        img {
+            padding: 0 0 0 0;
+            margin: 0 0 0 0;
+        }
+    </style>
+</head>
+<body>
+<div id="div">
+</div>
+<script>
+    var tree = new CreateTree(document.getElementById('div'));
+
+    function CreateTree(element){
+        this.element = element;
+
+        this.data_init = function (data) {
+            this.data = data;
+            this.name = data.name;
+            this.href = data.href;
+            this.target = data.target;
+            this.icon = data.icon;
+            this.child = data.child;
+        }
+
+        this.createView = function () {
+
+            for(var i=0;i<this.child.length;i++){
+                var tag1 = document.createElement('div');
+                var name1 = document.createTextNode(this.child[i].name);
+                var button1 = document.createElement('input');
+
+                tag1.setAttribute('class',"div"+i);
+
+                button1.setAttribute('type','image');
+                button1.setAttribute('id','btn'+i);
+                button1.setAttribute('class','hide');
+                button1.setAttribute('src', this.child[i].icon);
+
+                tag1.appendChild(button1);
+                tag1.appendChild(name1);
+                this.element.appendChild(tag1)
+
+                for(var j=0;j<this.child[i].child.length;j++) {
+                    var tag2 = document.createElement('div');
+                    var name2 = document.createTextNode(this.child[i].child[j].name)
+                    var button2 = document.createElement('input');
+
+                    tag2.setAttribute('id', 'subClass' +i + j);
+
+                    button2.setAttribute("id", "subBtn");
+                    button2.setAttribute('type', 'image');
+                    button2.setAttribute('src', this.child[i].child[j].icon);
+                    button2.setAttribute('href',this.child[i].child[j].href);
+
+                    tag2.appendChild(button2);
+                    tag2.appendChild(name2);
+                    tag1.appendChild(tag2);
+
+                    button2.addEventListener('click',function () {
+                        window.location = event.target.getAttribute("href");
+                    })
+                }
+
+                button1.addEventListener('click',function () {
+                    var temp;
+                    for(var a=1;a<this.parentElement.children.length;a++){
+                        temp = this.parentElement.children[a];
+                        for(var i=0;i<data.child.length;i++){
+                            for(var j=0;j<data.child[i].child.length;j++) {
+                                if (temp.getAttribute("class") == 'hide') {
+                                    temp.setAttribute("class", "open");
+                                    temp.setAttribute("style","display:block");
+                                    event.target.setAttribute("src", "./minus.gif");
+                                } else {
+                                    temp.setAttribute("class", "hide");
+                                    temp.setAttribute("style","display:none");
+                                    event.target.setAttribute("src", "./plus.gif");
+                                }
+                            }
+                        }
+
+                    }
+                })
+            }
+        }
+    }
+
+    // root객체
+    var data = {"name":"name","href":"A링크","target":"target","icon":"","child":[]};
+
+    var childA = {"name":"관리자메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+    var childB = {"name":"직원메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+    var childC = {"name":"관리자메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+
+    data.child.push(childA);
+    data.child.push(childB);
+    data.child.push(childC);
+
+    var childA1 = {"name":"부하직원조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childA2 = {"name":"결재승인","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childA3 = {"name":"결재내역조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+
+    var childB1 = {"name":"결재신청","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childB2 = {"name":"급여정보조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childB3 = {"name":"인사정보조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+
+    var childC1 = {"name":"기준관리","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childC2 = {"name":"근무현황조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+    var childC3 = {"name":"평가현황조회","href":"http://w3.schools.com","target":"_blank","icon":"./file.gif","child":[]};
+
+    childA.child.push(childA1);
+    childA.child.push(childA2);
+    childA.child.push(childA3);
+
+    childB.child.push(childB1);
+    childB.child.push(childB2);
+    childB.child.push(childB3);
+
+    childC.child.push(childC1);
+    childC.child.push(childC2);
+    childC.child.push(childC3);
+
+
+
+    tree.data_init(data);
+
+    tree.createView();
+    //
+</script>
+</body>
+</html>

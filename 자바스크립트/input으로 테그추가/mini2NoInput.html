@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<script type="text/Javascript">
+
+function output(){
+	var body = document.getElementsByTagName('body')[0];
+	var div = make("div", {'style':'background-color:red;', 'id':'div1'}, "hello world");
+	body.appendChild(div);
+	var tds = [make("td",{},"Name"), make("td",{},"Type"), make("td",{},"Value")];  
+	var tr = make("tr",{}, tds);
+	var table = make("table", {'style':'border: 1px solid red;'}, tr);      
+	body.appendChild(table);
+}
+
+
+
+function make(tagname, attributes, children){
+  	var td = document.createElement('td'); // 전역변수로 사용하기 위해 선언
+  	var tr = document.createElement('tr');
+	
+  	//tag name이 div일경우 
+	if(tagname == "div"){
+		var tag = document.createElement(tagname); // tagname값 받아 div생성
+		tag.setAttribute("style",attributes.style); // style적용
+		tag.setAttribute("id", attributes.id); // id 적용
+		
+		if(typeof children == 'string'){ // 타입검사
+      		var text = document.createTextNode(children); // text노드만들기
+		    tag.appendChild(text);
+      	} else { // string이면 
+      		tag.innerHTML = children; // children 값 tag에 넣음
+      	}
+		return tag;
+	}else if(tagname == "td" || tagname == "tr"){ // 이 두경우에
+		var tag = document.createElement(tagname); // td or tr tag 생성
+		tag.innerHTML = children; // tr : <tr><td>Name</td>,<td>Type</td>,<td>Value</td></tr>
+		return tag.outerHTML; // inner가 아닌 outer로 tag와 텍스트까지 전부 리턴하도록 하였음
+	
+	} else { 
+		var tag = document.createElement(tagname); // 위 조건을 다 지나온 경우에 실행
+		tag.setAttribute("style",attributes.style);  // style적용
+		tag.setAttribute("id", attributes.id); 	// id적용
+		var n_child = children.replace(/,/gi, ""); // replaceAll 효과 , /,/gi -> 정규식
+		tag.appendChild(tr); // table에 tr appendChild
+		tag.innerHTML = n_child; // innerHTML : html요소의 안쪽값을 n_child로 한다.
+		return tag; //table 리턴위해 tag만 리턴.
+		
+	}
+	
+}
+
+</script>
+<body>
+
+	<div>
+		<button onClick="output()">출력</button>
+	</div>
+
+</body>
+</html>

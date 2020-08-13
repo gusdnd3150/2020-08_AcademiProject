@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .has-children.close{
+            list-style-image: url(./plus.gif);
+        }
+
+        .has-children {
+            list-style-image: url(./minus.gif);
+        }
+        li{
+            list-style-image: url(./file.gif);
+        }
+        li.has-children.close>*{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="div"></div>
+<script>
+    var tree = new CreateTree(document.getElementById('div'));
+
+    function CreateTree(element){
+        this.element=element;
+
+        const menu = document.createElement('ul');
+
+        this.data_init = function(data) {
+            const firstLevel = data.child.filter(item => !item.parent)
+            const getFirstList = firstLevel.map(buildTree)
+            getFirstList.forEach(li => menu.append(li));
+
+            function buildTree(item) {
+                const li = document.createElement('li');
+                li.innerHTML = item.name;
+
+                const children = item.child.filter(child => child.parent === item.id);
+
+                if (children.length > 0) {
+                    li.addEventListener('click', event => {
+                        event.stopPropagation()
+                        event.target.classList.toggle('close');
+                    })
+                    li.classList.add('has-children')
+                    children.forEach(child => li.setAttribute("href",child.href));
+                    children.forEach(child => li.setAttribute("icon",child.icon));
+
+                    const subMenu = document.createElement('ul');
+                    children.map(buildTree).forEach(li => subMenu.append(li))
+                    li.append(subMenu);
+
+                }
+                return li;
+            }
+        }
+
+        this.createView = function() {
+            this.element.append(menu)
+        }
+    }
+
+    var data = {"name":"name","href":"A링크","target":"target","icon":"","child":[]};
+
+    var childA = {"name":"관리자메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+    var childB = {"name":"직원메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+    var childC = {"name":"관리자메뉴","href":"","target":"","icon":"./minus.gif","child":[]};
+
+    data.child.push(childA);
+    data.child.push(childB);
+    data.child.push(childC);
+
+    var childA1 = {"name":"부하직원조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childA2 = {"name":"결재승인","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childA3 = {"name":"결재내역조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+
+    var childB1 = {"name":"결재신청","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childB2 = {"name":"급여정보조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childB3 = {"name":"인사정보조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+
+    var childC1 = {"name":"기준관리","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childC2 = {"name":"근무현황조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childC3 = {"name":"평가현황조회","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+
+    childA.child.push(childA1);
+    childA.child.push(childA2);
+    childA.child.push(childA3);
+
+    childB.child.push(childB1);
+    childB.child.push(childB2);
+    childB.child.push(childB3);
+
+    childC.child.push(childC1);
+    childC.child.push(childC2);
+    childC.child.push(childC3);
+
+    var childA11 = {"name":"뎁스111","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childA12 = {"name":"뎁스112","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+    var childA13 = {"name":"뎁스113","href":"http://w3.schools.com","target":"_blank","icon":"./minus.gif","child":[]};
+
+    childA1.child.push(childA11);
+    childA1.child.push(childA12);
+    childA1.child.push(childA13);
+
+
+    tree.data_init(data);
+
+    tree.createView();
+</script>
+</body>
+</html>

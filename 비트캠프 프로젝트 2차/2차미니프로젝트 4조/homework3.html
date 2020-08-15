@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        th{
+            width:70px;
+            height: 40px;
+            text-align:center;
+            font-size:17px;
+            font-family: 굴림;
+        }
+        td{
+            width: 70px;
+            height: 40px;
+            text-align: right;
+            vertical-align: top;
+            font-size: 15px;
+            font-family: 굴림;
+        }
+          
+    </style>
+    <script type="text/javascript">
+        var today = new Date(); //오늘날짜, 인자를 전달 하지 않으면 내 컴퓨터 로컬기준 현재 날짜와 시간 반환,2020/08/12
+        function prevCalendar(){
+            today = new Date(today.getFullYear(),today.getMonth()-1,today.getDate());  //이전달 Date(년,월,일) 설정
+            buildCalendar();
+        }
+        function nextCalendar(){
+            today = new Date(today.getFullYear(),today.getMonth()+1, today.getDate());  //다음달 Date(년,월,일) 설정
+            buildCalendar();
+        }
+        function buildCalendar(){
+            var doMonth = new Date(today.getFullYear(),today.getMonth(),1); //첫날, new를 쓰면 로컬의 정확한 월을 가져옴
+            var lastDate = new Date(today.getFullYear(),today.getMonth()+1,0); //마지막날, 다음달에 날짜를 0을 주면 현재 달의 마지막날 가져옴
+            var tbCalendar = document.getElementById('calendar');
+
+            var tbCalendarYM = document.getElementById('tbCalendarYM'); //상단에 몇년 몇월
+            tbCalendarYM.innerHTML = today.getFullYear()+"년 "+ (today.getMonth()+1) +"월";  //new 찍지 않아서 +1, 0~11월
+
+            var prev = document.getElementById('prev');
+            var next = document.getElementById('next');
+            prev.innerHTML = today.getMonth()+"월";         //전 달
+            next.innerHTML = (today.getMonth()+2)+"월";     //내 달
+            
+            //이번달이 끝나면 다음달로 넘김
+            while(tbCalendar.rows.length > 2){  //(전달이나 내달 클릭시)1행,2행 두개만 남기고 삭제, 
+                tbCalendar.deleteRow(tbCalendar.rows.length-1);   //deleteRow index 0부터~
+            }
+            var row = null;
+            row = tbCalendar.insertRow();  //테이블에 새로운 열 삽입, 초기화
+            var cnt = 0; //셀의 갯수 카운트
+
+            //그 달의 시작 요일 1일 
+            for(i=0;i<doMonth.getDay();i++){    //getDay 요일, 0=일요일 1=월요일~ 6=토요일 / 현재 8월은 6, 토요일 1일
+                cell = row.insertCell(); //열 한칸 한칸 계속 만들어줌
+                cnt = cnt+1; //열의 갯수를 계속 다음 위치로
+            }
+            //달력 출력, 1일부터 마지막 일까지
+            var day=null;
+            for(i=1;i<=lastDate.getDate();i++){
+                cell = row.insertCell();           
+                cell.innerHTML = i;
+                cnt = cnt+1;
+                //일요일 계산(컬러 설정)
+                if(cnt%7==1){
+                    cell.innerHTML = "<font color=#FF9090>" +i;
+                }
+                
+                //토요일 계산(컬러 설정과 다음 행으로 넘어가도록)
+                if(cnt%7==0){
+                    cell.innerHTML = "<font color=#7ED5E4>" +i;      
+                    row = tbCalendar.insertRow();  //토요일 다음에 올 셀 추가
+                }
+                //달력에 있는 년, 달과 내 컴퓨터의 로컬 년,달이 같고, 일이 오늘의 일과 같으면
+                var date = new Date();  //2020.08.12 ,비교를 위해 date 객체 하나더 생성
+                if(today.getFullYear()==date.getFullYear() && today.getMonth()==date.getMonth() && i==date.getDate()){
+                    cell.bgColor= "lightgray";
+                    var times = null;
+                    var hour = date.getHours();
+                    if(hour >12){   //오전 오후 계산과 0붙여서 자릿수 맞추기
+                        hour = hour - 12;
+                        times = date.getDate()+"<br>"+"오후"+("0"+hour).slice(-2)+":"+("0"+date.getMinutes()).slice(-2);
+                    }else{
+                        times = date.getDate()+"<br>"+"오전"+("0"+hour).slice(-2)+":"+("0"+date.getMinutes()).slice(-2);
+                    }
+                    cell.innerHTML = times;
+                }
+            }
+        }
+    </script>  
+</head>
+<body>
+    <p></p>
+    <h3 align="center">달력</h3>
+    <table id="calendar" border="3" align="center">
+        <tr>
+            <th><label onclick="prevCalendar()" id="prev">m</label></th>
+            <th align="center" id="tbCalendarYM" colspan="5">yyyy년 m월</th>
+            <th><label onclick="nextCalendar()" id="next">m</label></th>
+        </tr>
+        <tr class=first>
+            <th><font color="#FF9090">일</font></th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th><font color="#7ED5E4">토</font></th>
+        </tr>
+    </table> 
+    <script language="javascript" type="text/javascript">
+        buildCalendar();
+    </script>
+</body>
+</html>

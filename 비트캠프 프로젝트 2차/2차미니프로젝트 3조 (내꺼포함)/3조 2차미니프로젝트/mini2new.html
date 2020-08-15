@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+
+<style>
+   div{
+   border-style:solid;
+   border-color:gray;
+   margin: auto;
+   width:400px;
+   padding: 20px;
+   padding:
+   }
+</style>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+
+	function add() {
+	
+
+		var tagname = document.getElementById('tag').value; // tag 
+		var attributes = document.getElementById('attributes').value; // 속성
+		var att = attributes.split(",");
+		var content = document.getElementById('content').value; 
+		var con = content.split(",");
+		
+		var children = document.getElementById('children').value; // children
+
+		function obj() {      // 속성을 담을 그릇으로서 객체를 하나 생성
+			this.name="";
+		    this.content="";
+		}; 
+		var obj2 = new obj();
+	    var obj3 = new obj();
+		var arr =[];
+
+		if(att.length == 1 && con.length==1){   //속성 요청이 1번인지 2번인지 구분하는 로직
+			obj2.name= att[0];
+			obj2.content= con[0];
+		
+			arr.push(obj2);
+
+		}else if (att.length == 2 && con.length==2){
+			obj2.name= att[0];
+			obj2.content= con[0];
+			obj3.name = att[1];
+			obj3.content= con[1];
+			arr.push(obj2);
+			arr.push(obj3);
+		}
+        
+		
+		return make(tagname, arr, children);
+	}
+	function make(tagname, arr, children) {
+		var parent = document.getElementById('output'); //만들어진 tag를 넣을곳
+		var contents = children.split(",");             //자식요소 입력칸
+		var tagtype = tagname.split(",");             //tag명 입력칸
+        var tag = document.createElement(tagtype[1]);  // 입력받은 tag
+        var childtag ='';
+        var text ='';
+        
+        if(tagtype[0] == "append"){             //tag추가
+            parent.appendChild(tag);
+            if(contents.length ==1){   //아무것도 없으면 1  ""   undefind   //else로 뺄까
+            	console.log(" 적지 않음");
+            }
+            else if (contents[0] != "" && contents[1] ==""){   // [0]에만 적으면  2     차일드 테그 추가
+            	childtag = document.createElement(contents[0]);
+            	tag.appendChild(childtag);
+            }else if (contents[0] == "" && contents[1] !=""){  // [1]에만 적으면 2     text 출력   
+				text = contents[1];
+				tag.innerHTML = text; 
+            }else {                                          //  e둘다 적으면   2   차일드,text
+            	childtag = document.createElement(contents[0]);
+            	tag.appendChild(childtag);
+            	text = contents[1];
+            	childtag.innerHTML = text; 
+            }
+            
+            if (arr[0].name != ''){  //속성
+			   for(var i in arr){
+				  tag.setAttribute(arr[i].name,arr[i].content);  
+			   }
+            }
+            
+
+        }
+        else if (tagtype[0] == 'addChild'){         // id속성으로 접근하여 하위 tag에 노드 추가 및 설정 (속성 설정가능)    완료
+
+        	if (contents[0] != "" && contents[1] ==""){   // [0]에만 적으면  2     차일드 tag 추가
+        	var idTag = document.getElementById(tagtype[1]);  
+        	var childtag = document.createElement(contents[0]);  
+        	idTag.appendChild(childtag);
+            }else if (contents[0] != "" && contents[1] !=""){                      //둘다 적으면
+            	var idTag = document.getElementById(tagtype[1]);  
+            	var childtag = document.createElement(contents[0]);  
+            	idTag.appendChild(childtag);
+            	text = contents[1];
+        	    childtag.innerHTML = text;
+            	
+            }
+
+			for(var i =0; i< arr.length;i++){
+				childtag.setAttribute(arr[i].name,arr[i].content);  
+			}
+        }
+		else if (tagtype[0] == "modAttr"){        // id로 접근하여 해당 tag의 속성값 변경                완료 (여유있을때 다른 접근법도 적용)
+            var idTag = document.getElementById(tagtype[1]); 
+			for(var i =0; i< arr.length;i++){
+				idTag.setAttribute(arr[i].name,arr[i].content);  
+			}
+        }
+	}
+
+
+</script>
+</head>
+
+<body>
+    <div>
+	<input type="text" id="tag"> new node 
+	</input><br>
+	<input type="text" id="attributes"> attribute
+	</input><br>
+	<input type="text" id="content">    contents
+	</input><br>
+	<input type="text" id="children">  child tag or text
+	</input><br>
+	<input type="button" onclick="add()" value="set">
+	</button>
+	</div>
+	<br>
+
+	<div id="output"></div>
+
+</body>
+</html>

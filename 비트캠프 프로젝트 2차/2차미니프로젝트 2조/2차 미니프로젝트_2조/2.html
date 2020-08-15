@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function make(tagname, attributes, children) {
+            let element = document.createElement(tagname);  // tagname으로 element 생성
+            for(let key in attributes) {    // 만든 element에 attributes 설정
+                element.setAttribute(key, attributes[key]);
+            }
+            // 자식이 string일 때
+            if(typeof children === 'string') {
+                let t = document.createTextNode(children); // textnode 생성
+                element.append(t);  // element에 textnode 추가
+            } else {
+                // 자식이 배열이 아닐 때
+                if(!Array.isArray(children)) {
+                    element.append(children);
+                } else { // 자식이 element 배열일 때
+                    for(let i=0; i<children.length; i++) {
+                        element.append(children[i]);
+                    }
+                }
+            }
+            return element;
+        }
+        var body = document.getElementsByTagName('body')[0];
+
+        var div = make("div", {'style':'background-color:red', 'id':'div1'}, "hello world");
+        body.append(div);
+
+        var tds = [make("td", {}, "Name"), make("td", {}, "Type"), make("td",{}, "Value")];
+        var tr = make("tr", {}, tds);
+
+        var table = make("table", {'style':'border: 1px solid red;'},tr);
+        body.appendChild(table);
+    </script>
+</body>
+</html>

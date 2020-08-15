@@ -1,0 +1,27 @@
+
+
+●기능 명령어
+1. append= 새로운 요소를 만든다
+2. addChild = id속성으로 부모node 하위로 tag를 추가(속성설정가능,2개 가능)
+3. modAttr = id속성으로 tag에 접근하여 속성을 변경(2개 가능)
+
+●작성법
+
+1. node 추가
+append,tag
+addTag,id(속성)
+modAttr,id(속성)
+
+2. 속성 
+ 1개 or 2개 속성 설정
+ex. style,id
+
+3. 속성내용
+ 속성 내용
+ex. background-color:red
+
+
+4. child tag 추가 or text추가
+ex.  li,text
+     li,         
+      ,text

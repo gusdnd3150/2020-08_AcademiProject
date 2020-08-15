@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+
+    <style>
+        .tab-menu {
+            list-style: none;
+            height:80px;
+        }
+        .tab-menu li {
+            width:99px;
+            height:40px;
+            background-position-y:0;
+            text-indent: -1000px;
+            overflow: hidden;
+            display: inline-block;
+            float:left;
+        }
+        .tab-menu li:hover {
+            background-position-y: -40px;
+        }
+        .tab-menu li.select {
+            background-position-y: -80px;
+            height:80px;
+        }
+        .tab-menu li.menuitem1 {
+            background-image: url(images/newbtn.bar.1.png);
+        }
+        .tab-menu li.menuitem2 {
+            background-image: url(images/newbtn.bar.2.png);
+        }
+        .tab-menu li.menuitem3 {
+            background-image: url(images/newbtn.bar.3.png);
+        }
+        .tab-menu li.menuitem4 {
+            background-image: url(images/newbtn.bar.4.png);
+        }
+        .tab-menu li.menuitem5 {
+            background-image: url(images/newbtn.bar.5.png);
+        }
+        .tab-menu li.menuitem6 {
+            background-image: url(images/newbtn.bar.6.png);
+        }
+
+    </style>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        var target={}
+        var className = {}
+        function select() {
+        	if($(event.target).is("li")){
+        		var id = parseInt($(event.target).parent().attr('id').charAt(7));
+        		if(target[id] == null){
+        			target[id] = $(event.target);
+        			className[id] = target[id].attr('class');
+        		}
+        		target[id].attr('class', className[id]);
+        		target[id] = $(event.target);
+        		className[id] = target[id].attr('class');
+        		target[id].attr('class', 'select');
+        		target[id].css('background-image', 'url(images/newbtn.bar.'+className[id].charAt(8)+'.png)')       	
+        	}
+        }      
+    </script>
+</head>
+
+<body>
+<p>첫 번째 탭메뉴</p>
+<ul class="tab-menu" id="tabMenu1" onclick="select()">
+    <li class="menuitem1">google</li>
+    <li class="menuitem2">facebook</li>
+    <li class="menuitem3">pinterest</li>
+    <li class="menuitem4">twitter</li>
+    <li class="menuitem5">airbnb</li>
+    <li class="menuitem6">path</li>
+</ul>
+<p>두 번째 탭메뉴</p>
+<ul class="tab-menu" id="tabMenu2" onclick="select()">
+    <li class="menuitem1">google</li>
+    <li class="menuitem2">facebook</li>
+    <li class="menuitem3">pinterest</li>
+    <li class="menuitem4">twitter</li>
+    <li class="menuitem5">airbnb</li>
+    <li class="menuitem6">path</li>
+</ul>
+<ul class="tab-menu" id="tabMenu3" onclick="select()">
+    <li class="menuitem1">google</li>
+    <li class="menuitem2">facebook</li>
+    <li class="menuitem3">pinterest</li>
+    <li class="menuitem4">twitter</li>
+    <li class="menuitem5">airbnb</li>
+    <li class="menuitem6">path</li>
+</ul>
+</body>
+</html>

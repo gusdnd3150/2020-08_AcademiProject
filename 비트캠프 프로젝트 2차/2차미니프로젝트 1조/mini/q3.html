@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        th{
+            font-size: xx-large;
+        }
+        td{
+            font-weight: bold;
+            font-size: small;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+       
+        // 달력을 그릴 날짜
+        var date = new Date();
+        // 문서 준비시 초기화 함수 작동
+        $(document).ready(function() {
+            init();
+        })
+
+        function init() {
+            //먼저 이번달 달력을 그린 후 prev와 next id에 click 이벤트 할당
+            draw();
+            $('#prev').click(function () {
+                prev();
+            })
+            $('#next').click(function () {
+                next();
+            })
+        }
+        
+        function prev() {
+            // date의 달을 1개월 전으로 바꾸고 draw 함수 호출
+            date = new Date(date.getFullYear(), date.getMonth()-1, date.getDate());
+            draw();
+        }
+        function next() {
+            // 상동
+            date = new Date(date.getFullYear(), date.getMonth()+1, date.getDate());
+            draw();
+        }
+
+        function draw() {
+             // 오늘 날짜, 바뀌지 않는다.
+            var TODAY = new Date();
+            //오늘 날짜 하이라이트를 위한 boolean
+            var check = false;
+            // TODAY와 date의 연,월이 같을 시 true로 바꿔준다.
+            if(TODAY.getMonth() == date.getMonth() && TODAY.getFullYear() == date.getFullYear()){
+                check = true;
+            }
+            // 이 달 첫날(1일)의 요일을 구해준다. 범위는 일(0)~토(6)
+            var stDateIdx = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            // 말일이 며칠인지도 구해준다. 다음달의 0일을 구하도록 하면 이번달 말일이 나옴
+            var ltDate = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
+            // 타이틀에 달력 연월 표기. month는 0부터 시작하기 때문에 text로 보여주려면 +1 해줘야함
+            $('#title').text(date.getFullYear()+'년 '+(date.getMonth()+1)+'월');
+            var output = '';
+            output += '<tr vertical-align="top" align="right" bgcolor="#9BE2FE">';
+            // 1일의 요일에 따라 앞부분에 빈 셀 삽입
+            for(let i=0; i!=stDateIdx; i++){
+               output += '<td height="40"></td>';
+            }
+            // 1일부터 말일까지 셀 추가
+            for(let j=1; j<=ltDate; j++){
+                // 오늘 날짜에 하이라이트 + 시간표시를 위한 if문
+                if(check && TODAY.getDate() == j){
+                    var minutes = TODAY.getMinutes() > 10 ? TODAY.getMinutes() : ''+'0'+TODAY.getMinutes();
+                    output += '<td valign="top" bgcolor="#FAF9E3" height="40">'+j+'<br>'+TODAY.getHours()+':'+minutes+'</td>';
+                }else{
+                    output += '<td valign="top" height="40">'+j+'&nbsp;</td>';
+                }
+                // 이 달 첫날의 요일(0~6) + 현재 찍고 있는 날짜가 7의 배수면 행 바꿈
+                // 예를들어 일요일(0)부터 시작했으면 7의 배수마다 줄 바뀜, 수요일(3)이라면 4의 배수마다 줄 바뀜 
+                if((stDateIdx+j)%7==0){
+                    output+='</tr><tr vertical-align="top" align="right" bgcolor="#9BE2FE">'
+                }
+            }
+            output += '</tr>';
+            // tbody 안에 html 태그 삽입
+            $('#view').html(output);
+        }
+    </script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <div id='table'>
+        <table id='calendar' width='350'>
+            <tr bgcolor='lightyellow' align = 'center'>
+                <td width='50'>
+                     <img id='prev' width='40' height='40'src='./images/left.png'>
+                </td>
+                <th id='title' width='250' colspan='5'>
+                   
+                </th>
+                <td width='50'>
+                    <img id='next' width='40' height='40'src='./images/right.png'>
+                </td>
+            </tr>
+            <tr bgcolor="#48CBFF" align = 'center'>
+                <td width='50'>일</td>
+                <td width='50'>월</td>
+                <td width='50'>화</td>
+                <td width='50'>수</td>
+                <td width='50'>목</td>
+                <td width='50'>금</td>
+                <td width='50'>토</td>
+            </tr>
+            <tbody id='view'>
+            </tbody>
+        </table>     
+    </div>
+</body>
+</html>

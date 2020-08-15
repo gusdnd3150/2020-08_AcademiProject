@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 조회버튼 클릭
+            $("#search").click(function () {
+                search();
+            })
+
+            //저장버튼 클릭
+            $("#save").click(function () {
+                save();
+            });
+
+            //추가버튼 클릭
+            $("#reset").click(function () {
+                $('#id').removeAttr('readonly'); //조회 후 추가버튼 클릭시 readonly 속성 지우기
+                $('#id').val(""); //input 박스 안 값 지우기
+                $('#pwd').val("");
+                $('#name').val("");
+                $('#input').val("");
+            })
+
+            //이전 버튼 클릭
+            $("#pre").click(function () {
+                sib("preId"); //파라미터로 분류
+            })
+
+            //이후 버튼 클릭
+            $("#next").click(function () {
+                sib("nextId"); //파라미터로 분류
+            })
+        })
+        function search() {
+            let _id = $("#input").val(); //input 박스안 값 가져오기
+            if(_id==""){
+                alert("아이디를 입력해주세요");
+                return;
+            }
+            $.ajax({
+                type: "post",
+                async: "true",
+                dataType: "text",
+                data: {
+                    id: _id //data로 넘겨주기
+                },
+                url: "m/search.do",
+                success: function (data, textStatus) {
+                	if(data==""){
+                		alert("없는 회원입니다.");
+                		return;
+                	}
+                    let jsonInfo = JSON.parse(data);
+                    let pId = jsonInfo.id; //json으로 넘어온 값 받기
+                    let pPwd = jsonInfo.pwd;
+                    let pName = jsonInfo.name;
+
+                    $("#id").val(pId); //input안에 값 넣기
+                    $("#pwd").val(pPwd);
+                    $("#name").val(pName);
+                    $("#id").attr('readonly', true);
+                },
+                error: function (data, textStatus) {
+                    alert("에러발생");
+                },
+                complete: function (data, textStatus) {
+                }
+            });
+        }
+        function save() {
+            let inputId = $('#id').val(); //input값 받기
+            let inputPwd = $('#pwd').val();
+            let inputName = $('#name').val();
+            if (inputId == "") {
+                alert("아이디는 필수입니다.");
+                return;
+            }
+            $.ajax({
+                type: "post",
+                async: "true",
+                dataType: "text",
+                data: {
+                    id: inputId, //값 넘겨주기
+                    pwd: inputPwd,
+                    name: inputName
+                },
+                url: "m/save.do", //controller로 보냄
+                success: function (data, textStatus) {
+                    alert("저장되었습니다.")
+                },
+                error: function (data, textStatus) {
+                    alert("에러발생");
+                },
+                complete: function (data, textStatus) {
+                }
+            });
+        }
+        function sib(a) {
+            let inputId = $('#id').val(); //id 넘겨주기
+            $.ajax({
+                type: "post",
+                async: "true",
+                dataType: "text",
+                data: {
+                    id: inputId,
+                    fun: a, //데이터로 넘겨주기 이전,이후아이디 중 무엇을 조회할지 넘겨주기
+                },
+                url: "m/sib.do", //controller로 전송
+                success: function (data, textStatus) {
+                    if (data == "") { //이전,이후 아이디 없을 때 data 빈칸으로 넘어옴
+                        alert("조회할 회원이 없습니다.")
+                    } else { //있을 경우 화면 표시
+                        let jsonInfo = JSON.parse(data);
+                        let pId = jsonInfo.id;
+                        let pPwd = jsonInfo.pwd;
+                        let pName = jsonInfo.name;
+                        $("#id").val(pId);
+                        $("#pwd").val(pPwd);
+                        $("#name").val(pName);
+                    }
+                },
+                error: function (data, textStatus) {
+                    alert("에러발생");
+                },
+                complete: function (data, textStatus) {
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="input">
+    <button id="search">조회</button>
+    <button id="reset">추가</button>
+    <button id="save">저장</button>
+    <button id="pre">이전</button>
+    <button id="next">이후</button><br>
+    <table>
+        <tr>
+            <td>고객ID</td>
+            <td><input type="text" id="id"></td>
+        </tr>
+        <tr>
+            <td>고객PW</td>
+            <td><input type="text" id="pwd"></td>
+        </tr>
+        <tr>
+            <td>고객이름</td>
+            <td><input type="text" id="name"></td>
+        </tr>
+
+    </table>
+</body>
+
+</html>

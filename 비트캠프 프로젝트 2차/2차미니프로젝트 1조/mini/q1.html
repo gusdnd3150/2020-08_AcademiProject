@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+
+    <style>
+        .tab-menu {
+            list-style: none;
+            height:80px;
+        }
+        .tab-menu li {
+            width:99px;
+            height:40px;
+            background-position-y:0;
+            text-indent: -1000px;
+            overflow: hidden;
+            display: inline-block;
+            float:left;
+        }
+        .tab-menu li:hover {
+            background-position-y: -40px;
+        }
+        .tab-menu li.select {
+            background-position-y: -80px;
+            height:80px;
+        }
+        .tab-menu li.menuitem1 {
+            background-image: url(images/newbtn.bar.1.png);
+        }
+        .tab-menu li.menuitem2 {
+            background-image: url(images/newbtn.bar.2.png);
+        }
+        .tab-menu li.menuitem3 {
+            background-image: url(images/newbtn.bar.3.png);
+        }
+        .tab-menu li.menuitem4 {
+            background-image: url(images/newbtn.bar.4.png);
+        }
+        .tab-menu li.menuitem5 {
+            background-image: url(images/newbtn.bar.5.png);
+        }
+        .tab-menu li.menuitem6 {
+            background-image: url(images/newbtn.bar.6.png);
+        }
+
+    </style>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".tab-menu li").click(function(){ // .tab-menu 하위 li 클릭시
+                let ulID = "#"+$(this).parent().attr("id"); // li의 부모의 id 속성 get
+                let liClass = "."+$(this).attr("class");    // 현재 클릭된 요소의 클래스 
+                $(ulID+" li").removeClass("select");    // 해당하는 id영역내 li의 select 클래스 삭제
+                $(ulID+" "+liClass).addClass("select"); // 현재 클릭된 요소에 select 클래스 추가
+            });
+        });
+    </script>
+</head>
+
+<body>
+<p>첫 번째 탭메뉴</p>
+<ul class="tab-menu" id="tabMenu1">
+    <li class="menuitem1">google</li>
+    <li class="menuitem2">facebook</li>
+    <li class="menuitem3">pinterest</li>
+    <li class="menuitem4">twitter</li>
+    <li class="menuitem5">airbnb</li>
+    <li class="menuitem6">path</li>
+</ul>
+<p>두 번째 탭메뉴</p>
+<ul class="tab-menu" id="tabMenu2">
+    <li class="menuitem1">google</li>
+    <li class="menuitem2">facebook</li>
+    <li class="menuitem3">pinterest</li>
+    <li class="menuitem4">twitter</li>
+    <li class="menuitem5">airbnb</li>
+    <li class="menuitem6">path</li>
+</ul>
+</body>
+</html>

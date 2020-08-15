@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+
+    <style>
+      .tab-menu {
+        list-style: none;
+        height: 80px;
+      }
+      .tab-menu li {
+        width: 99px;
+        height: 40px;
+        background-position-y: 0;
+        text-indent: -1000px;
+        overflow: hidden;
+        display: inline-block;
+        float: left;
+      }
+      .tab-menu li:hover {
+        background-position-y: -40px;
+      }
+      .tab-menu li.select {
+        background-position-y: -80px;
+        height: 80px;
+      }
+      .tab-menu li.menuitem1 {
+        background-image: url(images/newbtn.bar.1.png);
+      }
+      .tab-menu li.menuitem2 {
+        background-image: url(images/newbtn.bar.2.png);
+      }
+      .tab-menu li.menuitem3 {
+        background-image: url(images/newbtn.bar.3.png);
+      }
+      .tab-menu li.menuitem4 {
+        background-image: url(images/newbtn.bar.4.png);
+      }
+      .tab-menu li.menuitem5 {
+        background-image: url(images/newbtn.bar.5.png);
+      }
+      .tab-menu li.menuitem6 {
+        background-image: url(images/newbtn.bar.6.png);
+      }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  </head>
+
+  <body>
+    <p>첫 번째 탭메뉴</p>
+    <ul class="tab-menu" id="tabMenu1">
+      <li class="menuitem1">google</li>
+      <li class="menuitem2">facebook</li>
+      <li class="menuitem3">pinterest</li>
+      <li class="menuitem4">twitter</li>
+      <li class="menuitem5">airbnb</li>
+      <li class="menuitem6">path</li>
+    </ul>
+    <p>두 번째 탭메뉴</p>
+    <ul class="tab-menu" id="tabMenu2">
+      <li class="menuitem1">google</li>
+      <li class="menuitem2">facebook</li>
+      <li class="menuitem3">pinterest</li>
+      <li class="menuitem4">twitter</li>
+      <li class="menuitem5">airbnb</li>
+      <li class="menuitem6">path</li>
+    </ul>
+    
+    <script>
+      let select1;  // 첫 번째 탭메뉴에서 선택된 한 li 기억하기 위함
+      let li1 = document.querySelectorAll("#tabMenu1 li");  // 첫번째 메뉴탭의 li들
+      for (let i = 0; i < li1.length; i++) {
+        li1[i].addEventListener("click", function () {
+          if (select1) select1.classList.remove("select"); // 선택된 li가 있으면 select 클래스 제거
+          this.classList.add("select"); // 선택한 li에 select 클래스 추가
+          select1 = this; // 선택한 li 저장
+        });
+      }
+
+      let select2;
+      let li2 = document.querySelectorAll("#tabMenu2 li");
+      for (let i = 0; i < li2.length; i++) {
+        li2[i].addEventListener("click", function () {
+          if (select2) select2.classList.remove("select");
+          this.classList.add("select");
+          select2 = this;
+        });
+      }
+
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        function init(){
+            function make(tagname, attributes, children){
+                //tagname
+                let tag = document.createElement(tagname);
+                console.log(tag);
+    
+                //attribute
+                let att = attributes;
+                for(let key in att){
+                    tag.setAttribute(key, att[key]);
+                    } tag;
+                
+                //children
+                let child = children; 
+                console.log(typeof child);
+                console.log(Array.isArray(child));
+
+                // string /element /elemnet 배열
+                if(child.nodeType==1){
+                    console.log("111111")
+                    tag.append(child);
+                }else if(Array.isArray(child)) {
+                    console.log("33333");
+                    for(var i =0; i<child.length; i++){
+                        tag.append(child[i]);
+                    }
+                }else if(typeof child == "string"){
+                    console.log("2222")
+                    var txt = document.createTextNode(child);
+                    tag.appendChild(txt);
+                }
+                return tag;
+        }
+
+        let body = document.getElementsByTagName('body')[0];
+        console.log(body);
+
+        let div = make("div", {'style':'background-color:red','id':'div1'} , "hello world");
+        body.appendChild(div);
+
+        let tds = [make("td", {} ,"Name"),make("td", {} ,"Type"),make("td", {} , "Value")];
+        var tr = make("tr",{}, tds);
+
+        var table = make("table", {'style':'border:1px solid red;'} ,tr);
+        body.append(table);
+
+        }
+        
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="init()">
+    
+</body>
+</html>

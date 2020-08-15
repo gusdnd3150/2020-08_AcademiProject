@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+function make(tagName, attr, child) {
+	var tag = document.createElement(tagName);
+	var prop = Object.keys(attr);
+	for(var i=0; i<prop.length; i++){
+		tag.setAttribute(prop[i], attr[prop[i]]);
+	}
+	if(typeof child === 'string'){
+		tag.appendChild(document.createTextNode(child));
+	}else if(Array.isArray(child)){
+		for(var i=0; i<child.length; i++){
+			tag.appendChild(child[i]);
+		}
+	}else{
+		tag.appendChild(child);
+	}
+	return tag;
+}
+$(document).ready(function() {
+	var tds = [make('td',{id:'hi'},'Name'),make('td',{},'Type'),make('td',{},'Value')];
+	var tds2 = [make('td',{},'홍길동'),make('td',{},'의적'),make('td',{},'레벨5')];
+	var tr = make('tr',{},tds);
+	var tr2 = make('tr',{},tds2);
+	var trs = [tr,tr2];
+	var table = make('table',{style:'border:1px solid red;'},trs);
+	var body = document.getElementsByTagName('body')[0];
+	body.appendChild(table);
+	console.log(body);
+})
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

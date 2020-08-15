@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>달력</title>
+<style>
+td {
+	text-align: center;
+	width: 50px;
+	height : 50px;
+	font-size : 20px;
+}
+</style>
+<script language="javascript">
+
+    var today = new Date(); // 오늘 날짜
+    var date = new Date();
+
+    function clock(){
+	  var now = new Date();
+	  var hour = now.getHours();
+	  var minute = now.getMinutes();
+	  var ampm;
+	  if(hour >= 12){
+		hour -= 12;
+		ampm = "오후";
+	  }else{
+		ampm = "오전";
+	  } hour = (hour == 0) ? 12 : hour;
+	
+	  if(minute < 10)
+		minute = "0" + minute;
+	  return ampm + hour + ":" + minute;
+    }
+ 
+    function lastmonth() //이전 달을 today에 값을 저장
+    { 
+        today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        buildCalendar(); //만들기
+    }
+    
+    function nextmonth()  //다음 달을 today에 저장
+    {
+        today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        buildCalendar();
+    }
+    
+    function buildCalendar()
+    {
+        var nMonth = new Date(today.getFullYear(), today.getMonth(), 1); //현재달의 첫째 날
+        var lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); //현재 달의 마지막 날
+        var tbcal = document.getElementById("calendar"); // 테이블 달력을 만들 테이블
+        var yearmonth = document.getElementById("yearmonth"); //  년도와 월 출력할곳
+        yearmonth.innerHTML = today.getFullYear() + "년 "+ (today.getMonth() + 1) + "월"; //년도와 월 출력
+        
+        //달력 삭제
+        while (tbcal.rows.length > 2)
+        {
+            tbcal.deleteRow(tbcal.rows.length - 1);
+        }
+
+        var row = null;
+        row = tbcal.insertRow();
+        var cnt = 0;  // 일요일, 토요일인지 확인하기 위한 count
+ 
+        // 1일 시작
+        // 시작하는 요일에 맞게 빈 cell 추가
+        for (i = 0; i < nMonth.getDay(); i++)
+        {
+            cell = row.insertCell();
+            cnt = cnt + 1;
+            cell.bgColor = "#f2faff";   // 날짜 배경색
+        }
+ 
+        // 달력
+        for (i = 1; i <= lastDate.getDate(); i++) // 1일부터 마지막 일까지
+        {
+            cell = row.insertCell();
+            
+            cell.bgColor = "#f2faff"; //날짜 배경색
+            cell.innerHTML = i;
+            cnt = cnt + 1;
+            if (cnt % 7 == 1) { //일요일 
+                cell.innerHTML = "<font color=red>" + i//일요일
+            }
+            if (cnt % 7 == 0) { // 토요일
+                cell.innerHTML = "<font color=blue>" + i//토요일
+                row = calendar.insertRow();// 줄 추가
+            }
+            if(today.getFullYear()==date.getFullYear() && today.getMonth()==date.getMonth() && i==date.getDate()) 
+            {
+                cell.style.color = "#708090"; // 오늘 날짜 글씨
+                cell.bgColor = "#E5FFCC";	// 날짜 배경색
+                
+                //cell에는 하나밖에 안 들어가서 div 생성
+                let d = document.createElement('div');
+                //innerHTML에 clock 넣고 
+                d.innerHTML = clock();
+                d.style.fontSize = "10px";
+                
+                cell.appendChild(d);
+            }
+        }
+    }
+    
+</script>
+</head>
+<body onload="buildCalendar();">
+	<table align="center" id="calendar" >
+		 <tr style = "text-align: center; background-color: #FFF201">
+            <td><img src="images/left.jpg" label onclick="lastmonth()" id="before" ></label></td>
+            <td colspan="5" align="center" id="yearmonth"></td>
+            
+            <td><img src="images/right.png" label onclick="nextmonth()" id="next" ></label></td>
+        
+        </tr>
+		<tr style = "background-color : #F9EEFA">
+			<td align="center"><font color="red">일</font></td>
+			<td align="center">월</td>
+			<td align="center">화</td>
+			<td align="center">수</td>
+			<td align="center">목</td>
+			<td align="center">금</td>
+			<td align="center"><font color="blue">토</font></td>
+		</tr>
+	</table>
+</body>
+</html>

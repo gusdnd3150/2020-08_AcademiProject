@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      a {
+        text-decoration: none;
+      }
+      .menu {
+        margin-left: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="div"></div>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+      function CreateTree(tree) {
+        this.tree = tree; // <div id='div'> </div>
+
+        this.data_init = function (data) {
+          for (let i = 0; i < data.child.length; i++) {
+            let div = document.createElement("div"); // (.menu_folder)
+            div.classList.add("menu_folder"); // 클래스 추가
+
+            let img = document.createElement("img");
+            img.setAttribute("src", data.child[i].icon);
+
+            let a = document.createElement("a");
+            //a.setAttribute('href', data.child[i].href);
+            //a.setAttribute('target', data.child[i].target);
+            a.style.cursor = "pointer";
+            a.appendChild(document.createTextNode(data.child[i].name)); // a.innerHTML = data.child[i].name;
+
+            // div에 img, a 추가
+            div.appendChild(img);
+            div.appendChild(a);
+
+            tree.appendChild(div);
+
+            let childsDiv = document.createElement("div"); // .menu_child / child 여러개를 담고 있는 div
+            for (let j = 0; j < data.child[i].child.length; j++) {
+              let childDiv = document.createElement("div"); // .menu / child div
+              childDiv.classList.add("menu");
+
+              let img = document.createElement("img");
+              img.setAttribute("src", data.child[i].child[j].icon);
+
+              let a = document.createElement("a");
+              a.setAttribute("href", data.child[i].child[j].href);
+              a.setAttribute("target", data.child[i].child[j].target);
+              a.appendChild(document.createTextNode(data.child[i].child[j].name)); // a.innerHTML = data.child[i].name;
+
+              childDiv.appendChild(img); // child div에 img태그 추가
+              childDiv.appendChild(a); // child div에 a태그 추가
+
+              childsDiv.appendChild(childDiv); // child들을 감싸는 div에 child 추가
+              childsDiv.style.display = 'none'; // 일단 display:none
+
+              tree.appendChild(childsDiv); // body에 child들을 감싸는 div 추가
+            }
+          }
+          console.log(this.tree);
+        };
+
+        this.createView = function () {
+          // 도대체
+        };
+      }
+
+      $(document).ready(function () {
+        $(".menu_folder").on("click", doClick);
+      });
+
+      function doClick(e) {
+        var div = $(this);
+        $(this)
+          .find("img") // 선택한 div 다음 img찾음
+          .attr("src", function (index, attr) { // img의 src 속성
+            if (attr.indexOf("add") != -1) {
+              div.next().css("display", "block");
+              return attr.replace("add", "remove");
+            } else {
+              div.next().css("display", "none");
+              return attr.replace("remove", "add");
+            }
+          });
+      }
+
+      // createtree 생성 후 div로 아이디 받아옴
+      var tree = new CreateTree(document.getElementById("div"));
+
+      // 메뉴객체 생성
+      // name : a 태그에 나타나는 내용
+      // href : a 태그에 사용될 URL
+      // target: a 태그의 target 속성
+      // icon: 기본 아이콘 대신할 아이콘 URL
+      // child : 자식배열
+
+      // root객체, root객체는 실제로 보이지 않는다 (child(A,B,C)의 부모)
+      var data = {
+        name: "name",
+        href: "A링크",
+        target: "target",
+        icon: "",
+        child: [],
+      };
+
+      // 자식개체를 하나 생성
+      var childA = {
+        name: " 관리자메뉴",
+        href: "",
+        target: "",
+        icon: "images/add.png",
+        child: [],
+      };
+      var childB = {
+        name: " 직원메뉴",
+        href: "",
+        target: "",
+        icon: "images/add.png",
+        child: [],
+      };
+      var childC = {
+        name: " 관리자메뉴",
+        href: "",
+        target: "",
+        icon: "images/add.png",
+        child: [],
+      };
+
+      // 자식1의 하위개체 A를 생성
+      var childA1 = {
+        name: " 부하직원조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childA2 = {
+        name: " 결재승인",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childA3 = {
+        name: " 결재내역조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+
+
+      var childA11 = {
+        name: "아아",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      
+      data.child.push(childA); // 자식1를 맨위개체에 붙이기
+      childA.child.push(childA1); // 자식1의 하위개체 붙이기
+      childA.child.push(childA2);
+      childA.child.push(childA3);
+
+      childA1.child.push(childA11);
+
+      // 자식1의 하위개체 B를 생성
+      var childB1 = {
+        name: " 결재신청",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childB2 = {
+        name: " 급여정보조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childB3 = {
+        name: " 인사정보조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      data.child.push(childB); // 자식1를 맨위개체에 붙이기
+      childB.child.push(childB1); // 자식1의 하위개체 붙이기
+      childB.child.push(childB2);
+      childB.child.push(childB3);
+
+      // 자식1의 하위개체 C를 생성
+      var childC1 = {
+        name: " 기준관리",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childC2 = {
+        name: " 근무현황조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      var childC3 = {
+        name: " 평가현황조회",
+        href: "https://www.w3schools.com",
+        target: "_blank",
+        icon: "images/file.png",
+        child: [],
+      };
+      data.child.push(childC); // 자식1를 맨위개체에 붙이기
+      childC.child.push(childC1); // 자식1의 하위개체 붙이기
+      childC.child.push(childC2);
+      childC.child.push(childC3);
+
+      tree.data_init(data); // 트리에 메뉴객체를 연결
+
+      tree.createView(); // 트리메뉴를 화면에 보여준다
+    </script>
+  </body>
+</html>

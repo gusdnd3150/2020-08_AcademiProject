@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var tree = new CreateTree(document.getElementById('div'));
+
+	var data = {name:"name",href:"A링크",target:"target",icon:"",child:[]};
+	var childA = {name:"관리자메뉴",href:"",target:"",icon:"images/menu_on.gif",child:[]};
+	var childA1 = {name:"기준등록",href:"http://naver.com",target:"folder",icon:"images/menu_on.gif",child:[]};
+	var childA2 = {name:"신청승인",href:"http://naver.com",target:"folder",icon:"images/menu_on.gif",child:[]};
+	var childA11 = {name:"구글",href:"http://google.com",target:"folder",icon:"images/menu_on.gif",child:[]};
+	var childA111 = {name:"기준1-1",href:"http://naver.com",target:"_blank",icon:"images/file.png",child:[]};
+	var childB = {name:"직원메뉴",href:"",target:"",icon:"images/menu_on.gif",child:[]};
+	var childB1 = {name:"결제신청",href:"http://naver.com",target:"_blank",icon:"images/file.png",child:[]};
+	var childB2 = {name:"급여정보조회",href:"http://naver.com",target:"_blank",icon:"images/file.png",child:[]};
+	data.child.push(childA);
+	childA.child.push(childA1);
+	childA.child.push(childA2);	
+	childA1.child.push(childA11);
+	childA11.child.push(childA111);
+	data.child.push(childB);
+	childB.child.push(childB1);
+	childB.child.push(childB2);	
+	
+	tree.data_init(data);
+	tree.createView(tree.menu);
+});
+
+function CreateTree(input) {
+	this.menu = null;
+	this.parent = input;
+}
+CreateTree.prototype.data_init = function(input) {
+	this.menu = input;
+	
+}
+CreateTree.prototype.createView = function() {
+		
+	for(var i=0; i<this.menu.child.length; i++){
+			var node = document.createElement("div");
+			//console.log(this.menu.child[i].name);
+			var text = document.createTextNode(this.menu.child[i].name);
+			var image = document.createElement("img");
+			image.setAttribute("src", this.menu.child[i].icon);
+			node.appendChild(image);
+			node.appendChild(text);
+			node.className = "parent";
+			node.onclick = hide;
+			this.parent.appendChild(node);
+			this.review(this.menu.child[i].child,node);
+			
+	}
+}
+
+CreateTree.prototype.review = function(childArray,parentNode) {
+
+	for(var i=0; i<childArray.length; i++){
+		var childnode = document.createElement('a');
+		var text = document.createTextNode(childArray[i].name);
+		childnode.className = "open";
+		if(childArray[i].target == "folder")childnode.onclick = hide;
+		else {childnode.setAttribute("href", childArray[i].href);}
+		var image = document.createElement("img");
+		image.setAttribute("src", childArray[i].icon);
+		childnode.appendChild(image);
+		childnode.appendChild(text);
+		parentNode.appendChild(childnode);
+		this.review(childArray[i].child,childnode);
+	}
+}
+
+
+var hide = function(e) {
+	if(e.target !== e.currentTarget)return;
+	for(var i=0; i<this.childNodes.length; i++){
+		if(this.childNodes[i].className == "open"){
+			this.childNodes[0].setAttribute("src", "images/menu_off.gif");
+			this.childNodes[i].className = "hide"
+		}else if(this.childNodes[i].className == "hide"){
+			this.childNodes[0].setAttribute("src", "images/menu_on.gif");
+			this.childNodes[i].className = "open"
+		}
+	}	
+}
+
+
+
+</script>
+<style>
+    .open{display:block;
+    margin-left: 15px;
+    }
+    .hide{
+    display:none;
+    cursor:pointer;}
+    .parent{cursor:pointer;
+    width: 150px;
+    }
+    a:visited 
+    {
+    color: black;
+    }
+    a{
+    text-decoration: none;
+    }
+</style>
+
+</head>
+<body>
+<div id="div"></div>
+
+</body>
+</html>
